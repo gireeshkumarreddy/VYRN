@@ -1,0 +1,112 @@
+[
+  {
+    "name": "hooded-down-jacket",
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "name": "puffer-down-vest",
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "name": "puffer-down-coat",
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "name": "puffer-down-jacket",
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "name": "zip-fleece-sweater",
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "name": "oversized-hoodie",
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "name": "merino-wool-cardigan",
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "name": "essential-tee",
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "name": "shell-back",
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "name": "hoodie-in-the-night",
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "name": "check-cotton-shirt",
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "name": "studio-portrait",
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "name": "category-streetwear",
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "name": "category-formal",
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "name": "category-casual",
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "name": "category-outerwear",
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "name": "category-layered",
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "name": "studio-berlin",
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "name": "studio-tokyo",
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "name": "studio-paris",
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "name": "studio-new-york",
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "name": "studio-close",
+    "width": 1536,
+    "height": 1024
+  }
+]
