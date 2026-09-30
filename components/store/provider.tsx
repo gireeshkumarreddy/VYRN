@@ -13,6 +13,8 @@ import {OpeningSequence} from './opening';
 type Shop={lines:Line[];busy:boolean;ready:boolean;paymentReady:boolean;add:(l:Line)=>Promise<boolean>;change:(l:Line,q:number)=>Promise<void>;openCart:()=>void;quick:(id:string)=>void;go:(url:string)=>void};
 const Context=createContext<Shop>(null!);export const useShop=()=>useContext(Context);
 export function Go({href,children,className='',transition=false,onClick,...rest}:{href:string;children:ReactNode;className?:string;transition?:boolean;[k:string]:unknown}){const s=useShop();return <Link href={href} className={className} {...rest} onClick={(e:MouseEvent<HTMLAnchorElement>)=>{if(typeof onClick==='function')onClick(e);if(href.includes('#')&&!e.metaKey&&!e.ctrlKey){const [path,hash]=href.split('#');if(!path||path===window.location.pathname){const target=document.getElementById(hash);if(target){e.preventDefault();history.replaceState(null,'',href);target.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});return}}}if(transition&&!e.metaKey&&!e.ctrlKey&&!e.shiftKey){e.preventDefault();s.go(href)}}}>{children}</Link>}
+/** Entry edge for an image: alternate by column within a row; a lone image follows the side of the page it sits on. */
+function revealFrom(el:HTMLElement){const r=el.getBoundingClientRect(),row=Array.from(el.parentElement?.children||[]).filter(s=>s!==el&&Math.abs(s.getBoundingClientRect().top-r.top)<8);if(row.length)return row.filter(s=>s.getBoundingClientRect().left<r.left).length%2?'bottom':'top';return r.left+r.width/2<innerWidth/2?'top':'bottom'}
 export function StoreProvider({children}:{children:ReactNode}){
  const [lines,setLines]=useState<Line[]>([]),[busy,setBusy]=useState(false),[ready,setReady]=useState(false),[paymentReady,setPaymentReady]=useState(false),[cart,setCart]=useState(false),[menu,setMenu]=useState(false),[search,setSearch]=useState(false),[query,setQuery]=useState(''),[quickId,setQuickId]=useState<string|null>(null),[size,setSize]=useState(''),[tiles,setTiles]=useState(false),[dark,setDark]=useState(false),[compact,setCompact]=useState(false),[categoryCover,setCategoryCover]=useState<number|null>(null);
  const pathname=usePathname(),router=useRouter(),lock=useRef(false),timers=useRef<ReturnType<typeof setTimeout>[]>([]);const quickProduct=getProduct(quickId||'');
@@ -27,10 +29,19 @@ export function StoreProvider({children}:{children:ReactNode}){
    if(!entry.isIntersecting)return;
    const el=entry.target as HTMLElement; observer.unobserve(el); el.classList.add('is-visible');
    if(reduced)return;
-   const mode=el.dataset.reveal||((el.matches('.source-image,img')||el.classList.contains('featured'))?'mask':'rise');
-   const delay=Number(el.dataset.delay||0);
-   const frames=mode==='line'?[{clipPath:'inset(0 100% 0 0)',opacity:.2},{clipPath:'inset(0)',opacity:1}]:mode==='mask'?[{clipPath:'inset(100% 0 0 0)',transform:'translateY(24px)'},{clipPath:'inset(0)',transform:'translateY(0)'}]:mode==='tile'?[{opacity:0,transform:'translateY(-35px)',clipPath:'inset(0 0 100% 0)'},{opacity:1,transform:'translateY(0)',clipPath:'inset(0)'}]:[{opacity:0,transform:'translateY(28px)'},{opacity:1,transform:'translateY(0)'}];
-   animations.push(el.animate(frames,{duration:mode==='mask'?900:mode==='line'?800:650,delay,easing:'cubic-bezier(.22,.7,.15,1)',fill:'backwards'}));
+   const image=el.matches('.source-image,img,.featured,.product-card')||el.dataset.reveal==='mask'||el.dataset.reveal==='tile';
+   const mode=el.dataset.reveal==='line'?'line':image?'image':'rise';
+   const delay=Number(el.dataset.delay||0),easing='cubic-bezier(.22,.7,.15,1)';
+   if(mode==='image'){
+    // Images enter along their alignment: alternate columns in a row, otherwise by the side of the page they sit on.
+    const top=(el.dataset.from||revealFrom(el))==='top';
+    animations.push(el.animate([{clipPath:top?'inset(0 0 100% 0)':'inset(100% 0 0 0)',transform:`translateY(${top?-44:44}px)`},{clipPath:'inset(0)',transform:'translateY(0)'}],{duration:1050,delay,easing,fill:'backwards'}));
+    const media=el.matches('img')?null:el.querySelector('img');
+    if(media)animations.push(media.animate([{transform:`translateY(${top?-6:6}%) scale(1.14)`},{transform:'none'}],{duration:1500,delay,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'}));
+    return;
+   }
+   const frames=mode==='line'?[{clipPath:'inset(0 100% 0 0)',opacity:.2},{clipPath:'inset(0)',opacity:1}]:[{opacity:0,transform:'translateY(28px)'},{opacity:1,transform:'translateY(0)'}];
+   animations.push(el.animate(frames,{duration:mode==='line'?800:650,delay,easing,fill:'backwards'}));
   }),{threshold:0,rootMargin:'0px 0px -24px 0px'});
   const attach=()=>document.querySelectorAll('.reveal:not(.is-visible)').forEach(el=>{if(!observed.has(el)){observed.add(el);observer.observe(el)}});
   attach();const mo=new MutationObserver(attach);mo.observe(document.body,{childList:true,subtree:true});

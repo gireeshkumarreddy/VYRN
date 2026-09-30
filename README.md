@@ -26,13 +26,15 @@ No actual GLB/glTF assets were provided. Photography is not described as 3D. The
 
 ## Motion
 
-Native scrolling; a measured Web Animations logo docking sequence followed by split-panel opening; staggered hero typography, model mask and diagonal image fragments; a 5.5-second category sequence with controlled displacement and white flashes, settling into one clickable lineup; per-section image masks, collage tile entrances and line-by-line editorial text; independently masked campaign regions; automatic carousel with pointer, touch, keyboard, pause and local filter/sort controls; and diagonal white-tile product transitions.
+Native scrolling; a measured Web Animations logo docking sequence followed by split-panel opening; staggered hero typography, model mask and diagonal image fragments with staggered white camera-flashes that cut to new cloth details; a 5.5-second category sequence with controlled displacement and white flashes, settling into one clickable lineup; image masks that enter from the top or bottom by column (or by the side of the page for single images), collage tile entrances and line-by-line editorial text; independently masked campaign regions; an automatic right-to-left collection glide whose fixed glass frame holds and labels the centred look, with pointer, touch, keyboard, pause and local filter/sort controls; and diagonal white-tile product transitions.
 
 The reveal system leaves content visible by default and animates only after intersection. Sections cannot remain hidden because a reveal class was missed. Category animation keeps a stable section height; mobile categories become a swipeable row to prevent page jumps. Reduced-motion settings bypass opening, flashes, masks, parallax and automatic collection movement. Mobile layouts are recomposed at 700px.
 
 ## Assets and editing
 
 All required visual assets are under public/assets. Catalog, reference crop mappings, image source dimensions, and prices are in lib/catalog.ts. Store UI is under components/store; routes and server endpoints are under app.
+
+The whole site is set in Manrope, self-hosted from public/fonts (SIL Open Font License, public/fonts/Manrope-OFL.txt).
 
 ## Complete source export
 
